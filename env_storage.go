@@ -4,7 +4,7 @@ import (
 	"os"
 )
 
-// envStorage implements getter and setter to interact with env
+// envStorage implements storer to interact with env
 type envStorage struct{}
 
 func (e *envStorage) set(key, value string) error {

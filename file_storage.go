@@ -9,7 +9,7 @@ type fileStorage struct {
 	storageFolder string
 }
 
-// envFile implements getter and setter to store env variables on disk
+// envFile implements storer to store and get env variables on disk
 type envFile struct {
 	file *os.File
 	env  map[string]string
