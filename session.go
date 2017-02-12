@@ -8,7 +8,7 @@ import (
 // terminal session with all arguments
 type session struct{}
 
-// launches a new terminal session with envs, panics if error
+// launches a new session with envs, panics if error
 func (s *session) launch(envs map[string]string) {
 	for k, v := range envs {
 		err := os.Setenv(k, v)
