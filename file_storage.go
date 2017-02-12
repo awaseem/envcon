@@ -6,13 +6,17 @@ import "encoding/json"
 
 // fileStorage interact with json files for envs
 type fileStorage struct {
+	settings      *settings
+	concel        conceler
 	storageFolder string
 }
 
 // envFile implements storer to store and get env variables on disk
 type envFile struct {
-	file *os.File
-	env  map[string]string
+	encrypt bool
+	file    *os.File
+	concel  conceler
+	env     map[string]string
 }
 
 func (f *fileStorage) newFile(fileName string) (*envFile, error) {
@@ -21,8 +25,10 @@ func (f *fileStorage) newFile(fileName string) (*envFile, error) {
 		return nil, err
 	}
 	return &envFile{
-		file: newF,
-		env:  make(map[string]string),
+		file:    newF,
+		concel:  f.concel,
+		encrypt: f.settings.encrypt,
+		env:     make(map[string]string),
 	}, nil
 }
 
@@ -40,8 +46,10 @@ func (f *fileStorage) getFile(fileName string) (*envFile, error) {
 		return nil, err
 	}
 	return &envFile{
-		file: openF,
-		env:  envMap,
+		file:    openF,
+		concel:  f.concel,
+		encrypt: f.settings.encrypt,
+		env:     envMap,
 	}, nil
 }
 
