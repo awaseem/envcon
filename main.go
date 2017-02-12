@@ -6,19 +6,10 @@ import (
 )
 
 func main() {
-	path, err := os.Getwd()
-	must(err)
-	f := &fileStorage{
-		storageFolder: path,
-	}
-	must(err)
-	// err = eFile.set("test1", "tester1")
-	// err = eFile.set("test2", "tester2")
-	// err = eFile.set("test3", "tester3")
-	// err = eFile.set("test4", "tester4")
-	// must(err)
-	// must(eFile.save())
-	// must(eFile.close())
+	envs := make(map[string]string)
+	envs["CLIENT_ID"] = "OH MY GOD"
+	s := &session{}
+	s.launch(envs)
 }
 
 func child() {
