@@ -13,10 +13,11 @@ type fileStorage struct {
 
 // envFile implements storer to store and get env variables on disk
 type envFile struct {
-	encrypt bool
-	file    *os.File
-	concel  conceler
-	env     map[string]string
+	settings    *settings
+	file        *os.File
+	concel      conceler
+	env         map[string]string
+	fileContent *fileContent
 }
 
 func (f *fileStorage) newFile(fileName string) (*envFile, error) {
@@ -25,10 +26,10 @@ func (f *fileStorage) newFile(fileName string) (*envFile, error) {
 		return nil, err
 	}
 	return &envFile{
-		file:    newF,
-		concel:  f.concel,
-		encrypt: f.settings.encrypt,
-		env:     make(map[string]string),
+		file:     newF,
+		concel:   f.concel,
+		settings: f.settings,
+		env:      make(map[string]string),
 	}, nil
 }
 
@@ -41,15 +42,22 @@ func (f *fileStorage) getFile(fileName string) (*envFile, error) {
 	if err != nil {
 		return nil, err
 	}
+	if f.settings.encrypt {
+		concelStr, err := f.concel.decrypt(f.settings.key, string(b))
+		if err != nil {
+			return nil, err
+		}
+		b = []byte(concelStr)
+	}
 	var envMap = make(map[string]string)
 	if err = json.Unmarshal(b, &envMap); err != nil {
 		return nil, err
 	}
 	return &envFile{
-		file:    openF,
-		concel:  f.concel,
-		encrypt: f.settings.encrypt,
-		env:     envMap,
+		file:     openF,
+		concel:   f.concel,
+		settings: f.settings,
+		env:      envMap,
 	}, nil
 }
 
@@ -83,6 +91,13 @@ func (e *envFile) save() error {
 	b, err := json.Marshal(e.env)
 	if err != nil {
 		return err
+	}
+	if e.settings.encrypt {
+		concelStr, err := e.concel.encrypt(e.settings.key, b)
+		if err != nil {
+			return err
+		}
+		b = []byte(concelStr)
 	}
 	_, err = e.file.Write(b)
 	if err != nil {

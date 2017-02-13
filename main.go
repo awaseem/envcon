@@ -1,15 +1,26 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 )
 
 func main() {
-	envs := make(map[string]string)
-	envs["CLIENT_ID"] = "OH MY GOD"
-	s := &session{}
-	s.launch(envs)
+	wd, err := os.Getwd()
+	must(err)
+	fs := fileStorage{
+		settings: &settings{
+			encrypt: true,
+			key:     []byte("12345thisisatest"),
+		},
+		concel:        &aesCryp{},
+		storageFolder: wd,
+	}
+	f, err := fs.getFile("test.envcon")
+	must(err)
+	fmt.Println(f.get("hello"))
+	must(f.close())
 }
 
 func child() {
