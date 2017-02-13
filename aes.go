@@ -4,14 +4,39 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
+	"crypto/sha1"
 	"encoding/base64"
 	"errors"
 	"fmt"
 	"io"
+
+	"golang.org/x/crypto/pbkdf2"
+)
+
+const (
+	keyLen    = 32
+	saltBytes = 32
+	iter      = 4096
 )
 
 // aesCryp implements cipher
 type aesCryp struct{}
+
+// generate key for AES
+func (a *aesCryp) keyGen(pass []byte) (key []byte, salt []byte, err error) {
+	salt = make([]byte, saltBytes)
+	_, err = io.ReadFull(rand.Reader, salt)
+	if err != nil {
+		return nil, nil, err
+	}
+	key = pbkdf2.Key(pass, salt, iter, keyLen, sha1.New)
+	return key, salt, nil
+}
+
+// generate key with salt for AES
+func (a *aesCryp) keyGenWithSalt(pass []byte, salt []byte) (key []byte) {
+	return pbkdf2.Key(pass, salt, iter, keyLen, sha1.New)
+}
 
 // encrypt string to base64 crypto using AES
 func (a *aesCryp) encrypt(key, text []byte) (string, error) {

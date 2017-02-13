@@ -8,6 +8,8 @@ type storer interface {
 
 // generic interface for encrypting and decrypting
 type conceler interface {
+	keyGen(pass []byte) (key []byte, salt []byte, err error)
+	keyGenWithSalt(pass []byte, salt []byte) (key []byte)
 	encrypt(key, text []byte) (string, error)
 	decrypt(key []byte, cryptoText string) (string, error)
 }

@@ -7,20 +7,30 @@ import (
 )
 
 func main() {
+	//create new file and save
+	// wd, err := os.Getwd()
+	// must(err)
+	// fs := fileStorage{
+	// 	concel:        &aesCryp{},
+	// 	storageFolder: wd,
+	// }
+	// envMap := make(map[string]string)
+	// envMap["hello"] = "world"
+	// f, err := fs.newFile("test.json", false)
+	// must(err)
+	// f.setContent(envMap, "test")
+	// f.save()
+
 	wd, err := os.Getwd()
 	must(err)
 	fs := fileStorage{
-		settings: &settings{
-			encrypt: true,
-			key:     []byte("12345thisisatest"),
-		},
 		concel:        &aesCryp{},
 		storageFolder: wd,
 	}
-	f, err := fs.getFile("test.envcon")
+	f, err := fs.getFile("test.json")
+	mapEnv, err := f.getContent("")
 	must(err)
-	fmt.Println(f.get("hello"))
-	must(f.close())
+	fmt.Println(mapEnv["hello"])
 }
 
 func child() {

@@ -6,7 +6,7 @@ type settings struct {
 }
 
 type fileContent struct {
-	encrypted bool
-	salt      string
-	content   string
+	Encrypted bool   `json:"encrypted"`
+	Salt      []byte `json:"salt"`
+	Content   []byte `json:"content"`
 }

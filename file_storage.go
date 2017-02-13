@@ -6,30 +6,28 @@ import "encoding/json"
 
 // fileStorage interact with json files for envs
 type fileStorage struct {
-	settings      *settings
 	concel        conceler
 	storageFolder string
 }
 
 // envFile implements storer to store and get env variables on disk
 type envFile struct {
-	settings    *settings
 	file        *os.File
 	concel      conceler
-	env         map[string]string
 	fileContent *fileContent
 }
 
-func (f *fileStorage) newFile(fileName string) (*envFile, error) {
+func (f *fileStorage) newFile(fileName string, encrypt bool) (*envFile, error) {
 	newF, err := os.Create(f.storageFolder + "/" + fileName)
 	if err != nil {
 		return nil, err
 	}
 	return &envFile{
-		file:     newF,
-		concel:   f.concel,
-		settings: f.settings,
-		env:      make(map[string]string),
+		file:   newF,
+		concel: f.concel,
+		fileContent: &fileContent{
+			Encrypted: encrypt,
+		},
 	}, nil
 }
 
@@ -42,22 +40,14 @@ func (f *fileStorage) getFile(fileName string) (*envFile, error) {
 	if err != nil {
 		return nil, err
 	}
-	if f.settings.encrypt {
-		concelStr, err := f.concel.decrypt(f.settings.key, string(b))
-		if err != nil {
-			return nil, err
-		}
-		b = []byte(concelStr)
-	}
-	var envMap = make(map[string]string)
-	if err = json.Unmarshal(b, &envMap); err != nil {
+	contents := fileContent{}
+	if err = json.Unmarshal(b, &contents); err != nil {
 		return nil, err
 	}
 	return &envFile{
-		file:     openF,
-		concel:   f.concel,
-		settings: f.settings,
-		env:      envMap,
+		file:        openF,
+		concel:      f.concel,
+		fileContent: &contents,
 	}, nil
 }
 
@@ -78,26 +68,51 @@ func (f *fileStorage) listFiles() ([]string, error) {
 	return fileNames, nil
 }
 
-func (e *envFile) set(key, value string) error {
-	e.env[key] = value
-	return nil
-}
-
-func (e *envFile) get(key string) (string, error) {
-	return e.env[key], nil
-}
-
-func (e *envFile) save() error {
-	b, err := json.Marshal(e.env)
+func (e *envFile) setContent(env map[string]string, pass string) error {
+	b, err := json.Marshal(env)
 	if err != nil {
 		return err
 	}
-	if e.settings.encrypt {
-		concelStr, err := e.concel.encrypt(e.settings.key, b)
+	if e.fileContent.Encrypted {
+		key, salt, err := e.concel.keyGen([]byte(pass))
 		if err != nil {
 			return err
 		}
-		b = []byte(concelStr)
+		encrypContent, err := e.concel.encrypt(key, b)
+		if err != nil {
+			return err
+		}
+		e.fileContent.Content = []byte(encrypContent)
+		e.fileContent.Salt = salt
+	} else {
+		e.fileContent.Content = b
+	}
+	return nil
+}
+
+func (e *envFile) getContent(pass string) (map[string]string, error) {
+	var env string
+	var err error
+	envMap := make(map[string]string)
+	if e.fileContent.Encrypted {
+		key := e.concel.keyGenWithSalt([]byte(pass), e.fileContent.Salt)
+		env, err = e.concel.decrypt(key, string(e.fileContent.Content))
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		env = string(e.fileContent.Content)
+	}
+	if err := json.Unmarshal([]byte(env), &envMap); err != nil {
+		return nil, err
+	}
+	return envMap, nil
+}
+
+func (e *envFile) save() error {
+	b, err := json.Marshal(e.fileContent)
+	if err != nil {
+		return err
 	}
 	_, err = e.file.Write(b)
 	if err != nil {
