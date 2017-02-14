@@ -32,7 +32,7 @@ func (f *fileStorage) newFile(fileName string, encrypt bool) (*envFile, error) {
 }
 
 func (f *fileStorage) getFile(fileName string) (*envFile, error) {
-	openF, err := os.Open(f.storageFolder + "/" + fileName)
+	openF, err := os.OpenFile(f.storageFolder+"/"+fileName, os.O_RDWR, 0660)
 	if err != nil {
 		return nil, err
 	}
@@ -114,13 +114,17 @@ func (e *envFile) save() error {
 	if err != nil {
 		return err
 	}
-	_, err = e.file.Write(b)
+	err = e.file.Truncate(0)
 	if err != nil {
 		return err
 	}
-	return e.file.Sync()
-}
-
-func (e *envFile) close() error {
+	_, err = e.file.WriteAt(b, 0)
+	if err != nil {
+		return err
+	}
+	err = e.file.Sync()
+	if err != nil {
+		return err
+	}
 	return e.file.Close()
 }

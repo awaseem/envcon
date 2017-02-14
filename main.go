@@ -16,19 +16,23 @@ var langs = []string{
 }
 
 func main() {
-	//create new file and save
 	// wd, err := os.Getwd()
 	// must(err)
 	// fs := fileStorage{
 	// 	concel:        &aesCryp{},
-	// 	storageFolder: wd,
+	// 	storageFolder: wd + "/data",
 	// }
 	// envMap := make(map[string]string)
-	// envMap["hello"] = "world"
-	// f, err := fs.newFile("test.json", false)
+	// envMap["hello"] = "worldksldfskldfjsklfjsdklfjsdklfjlfksjfkldsjfsklfjdsklfjsfkljsklfjl"
+	// envMap["hello2"] = "worldksldfskldfjsklfjsdklfjsdklfjlfksjfkldsjfsklfjdsklfjsfkljsklfjl"
+	// envMap["hello3"] = "worldksldfskldfjsklfjsdklfjsdklfjlfksjfkldsjfsklfjdsklfjsfkljsklfjl"
+	// envMap["hello4"] = "worldksldfskldfjsklfjsdklfjsdklfjlfksjfkldsjfsklfjdsklfjsfkljsklfjl"
+	// envMap["hello5"] = "worldksldfskldfjsklfjsdklfjsdklfjlfksjfkldsjfsklfjdsklfjsfkljsklfjl"
+	// f, err := fs.getFile("test.json")
 	// must(err)
-	// f.setContent(envMap, "test")
+	// f.setContent(envMap, "")
 	// f.save()
+	// f.close()
 
 	// wd, err := os.Getwd()
 	// must(err)

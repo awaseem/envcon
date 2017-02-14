@@ -2,3 +2,4 @@ vendor
 envcon
 *.json
 *.envcon
+.DS_Store

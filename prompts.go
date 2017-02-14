@@ -21,7 +21,7 @@ func (p *interactivePrompt) listCommands() {
 	case "create":
 		p.create()
 	case "update":
-		fmt.Println("hello world update")
+		p.update()
 	case "delete":
 		fmt.Println("hello world delete")
 	}
@@ -37,10 +37,8 @@ func (p *interactivePrompt) source() {
 	printError(err)
 	if envFile.fileContent.Encrypted {
 		pass = prompt.PasswordMasked("File is encrypted, please enter the passpharse")
-		envs, err = envFile.getContent(pass)
-	} else {
-		envs, err = envFile.getContent("")
 	}
+	envs, err = envFile.getContent(pass)
 	printError(err)
 	p.session.launch(envs)
 }
@@ -50,7 +48,7 @@ func (p *interactivePrompt) create() {
 	var done bool
 	envs := make(map[string]string)
 	fileName := prompt.StringRequired("Enter a name for this container")
-	encrypted := prompt.Confirm("Would you like to encrypt this container?")
+	encrypted := prompt.Confirm("Would you like to encrypt this container?(Yes,y/No,n)")
 	if encrypted {
 		pass = prompt.PasswordMasked("Enter a passpharse")
 	}
@@ -60,9 +58,35 @@ func (p *interactivePrompt) create() {
 		key := prompt.StringRequired("Enter a key")
 		value := prompt.StringRequired("Enter a value")
 		envs[key] = value
-		done = prompt.Confirm("stop adding enviroment variables?")
+		done = prompt.Confirm("stop adding enviroment variables?(Yes,y/No,n)")
 	}
 	printError(envFile.setContent(envs, pass))
 	printError(envFile.save())
-	printError(envFile.close())
+}
+
+func (p *interactivePrompt) update() {
+	var pass string
+	var done bool
+	envs := make(map[string]string)
+	files, err := p.fileStore.listFiles()
+	printError(err)
+	i := prompt.Choose("Pick a container to update", files)
+	envFile, err := p.fileStore.getFile(files[i])
+	printError(err)
+	if envFile.fileContent.Encrypted {
+		pass = prompt.PasswordMasked("File is encrypted, please enter the passpharse")
+	}
+	envs, err = envFile.getContent(pass)
+	printError(err)
+	for !done {
+		for k, v := range envs {
+			fmt.Println(k + "=" + v)
+		}
+		key := prompt.StringRequired("Enter a key")
+		value := prompt.StringRequired("Enter a value")
+		envs[key] = value
+		done = prompt.Confirm("stop adding/updating variables enviroment variables?(Yes,y/No,n)")
+	}
+	printError(envFile.setContent(envs, pass))
+	printError(envFile.save())
 }
