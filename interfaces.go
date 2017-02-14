@@ -13,3 +13,14 @@ type conceler interface {
 	encrypt(key, text []byte) (string, error)
 	decrypt(key []byte, cryptoText string) (string, error)
 }
+
+type filer interface {
+	newFile(fileName string, encrypt bool) (*envFile, error)
+	getFile(fileName string) (*envFile, error)
+	deleteFile(fileName string) error
+	listFiles() ([]string, error)
+}
+
+type launcher interface {
+	launch(envs map[string]string)
+}

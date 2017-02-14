@@ -1,10 +1,19 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 )
+
+var langs = []string{
+	"c",
+	"c++",
+	"lua",
+	"go",
+	"js",
+	"ruby",
+	"python",
+}
 
 func main() {
 	//create new file and save
@@ -21,16 +30,29 @@ func main() {
 	// f.setContent(envMap, "test")
 	// f.save()
 
+	// wd, err := os.Getwd()
+	// must(err)
+	// fs := fileStorage{
+	// 	concel:        &aesCryp{},
+	// 	storageFolder: wd,
+	// }
+	// f, err := fs.getFile("test.json")
+	// mapEnv, err := f.getContent("")
+	// must(err)
+	// fmt.Println(mapEnv["hello"])
+
 	wd, err := os.Getwd()
 	must(err)
-	fs := fileStorage{
+	fs := &fileStorage{
 		concel:        &aesCryp{},
-		storageFolder: wd,
+		storageFolder: wd + "/data",
 	}
-	f, err := fs.getFile("test.json")
-	mapEnv, err := f.getContent("")
-	must(err)
-	fmt.Println(mapEnv["hello"])
+
+	p := &interactivePrompt{
+		fileStore: fs,
+		session:   &session{},
+	}
+	p.listCommands()
 }
 
 func child() {
