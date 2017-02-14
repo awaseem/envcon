@@ -23,7 +23,7 @@ func (p *interactivePrompt) listCommands() {
 	case "update":
 		p.update()
 	case "delete":
-		fmt.Println("hello world delete")
+		p.delete()
 	}
 }
 
@@ -89,4 +89,11 @@ func (p *interactivePrompt) update() {
 	}
 	printError(envFile.setContent(envs, pass))
 	printError(envFile.save())
+}
+
+func (p *interactivePrompt) delete() {
+	files, err := p.fileStore.listFiles()
+	printError(err)
+	i := prompt.Choose("Pick a container to delete", files)
+	printError(p.fileStore.deleteFile(files[i]))
 }
