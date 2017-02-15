@@ -3,6 +3,7 @@ package main
 type commands struct {
 	fileStore filer
 	session   launcher
+	input     inputer
 }
 
 func (p *commands) list() ([]string, error) {
@@ -17,7 +18,7 @@ func (p *commands) source(fileName string) error {
 		return err
 	}
 	if envFile.fileContent.Encrypted {
-		pass = inputPasswordMasked("File is encrypted, please enter the passpharse")
+		pass = p.input.passwordMasked("File is encrypted, please enter the passpharse")
 	}
 	envs, err = envFile.getContent(pass)
 	if err != nil {
@@ -30,7 +31,7 @@ func (p *commands) source(fileName string) error {
 func (p *commands) create(fileName string, env map[string]string, encrypted bool) error {
 	var pass string
 	if encrypted {
-		pass = inputPasswordMasked("Enter a passpharse")
+		pass = p.input.passwordMasked("Enter a passpharse")
 	}
 	envFile, err := p.fileStore.newFile(fileName+".json", encrypted)
 	if err != nil {
@@ -51,7 +52,7 @@ func (p *commands) update(fileName string, env map[string]string) error {
 		return err
 	}
 	if envFile.fileContent.Encrypted {
-		pass = inputPasswordMasked("File is encrypted, please enter the passpharse")
+		pass = p.input.passwordMasked("File is encrypted, please enter the passpharse")
 	}
 	envs, err = envFile.getContent(pass)
 	if err != nil {

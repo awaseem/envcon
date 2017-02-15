@@ -23,9 +23,11 @@ func main() {
 	c := &commands{
 		fileStore: fs,
 		session:   &session{},
+		input:     &userInput{},
 	}
 	p := &interactivePrompt{
 		commands: c,
+		input:    &userInput{},
 	}
 	p.listCommands()
 }

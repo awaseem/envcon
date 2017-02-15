@@ -32,3 +32,13 @@ type commander interface {
 	update(fileName string, env map[string]string) error
 	delete(fileName string) error
 }
+
+type inputer interface {
+	string(prompt string, args ...interface{}) string
+	stringRequired(prompt string, args ...interface{}) (s string)
+	confirm(prompt string, args ...interface{}) bool
+	choose(prompt string, list []string) int
+	password(prompt string, args ...interface{}) string
+	passwordMasked(prompt string, args ...interface{}) string
+	indexOf(s string, list []string) int
+}
