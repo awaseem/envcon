@@ -3,5 +3,4 @@ import:
 - package: golang.org/x/crypto
   subpackages:
   - /pbkdf2
-- package: github.com/segmentio/go-prompt
 - package: github.com/howeyc/gopass

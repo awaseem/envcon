@@ -1,6 +1,6 @@
 package main
 
-import prompt "github.com/segmentio/go-prompt"
+import "fmt"
 
 var (
 	promptCommands = []string{"source", "create", "update", "delete"}
@@ -12,7 +12,7 @@ type interactivePrompt struct {
 
 func (p *interactivePrompt) listCommands() {
 	printLogo()
-	i := prompt.Choose("Please select from the following commands", promptCommands)
+	i := inputChoose("Please select from the following commands", promptCommands)
 	switch promptCommands[i] {
 	case "source":
 		p.source()
@@ -28,7 +28,7 @@ func (p *interactivePrompt) listCommands() {
 func (p *interactivePrompt) source() {
 	files, err := p.commands.list()
 	printError(err)
-	i := prompt.Choose("Select from the following enviroments", files)
+	i := inputChoose("Select from the following enviroments", files)
 	envFile := files[i]
 	p.commands.source(envFile)
 }
@@ -36,13 +36,13 @@ func (p *interactivePrompt) source() {
 func (p *interactivePrompt) create() {
 	var done bool
 	envs := make(map[string]string)
-	fileName := prompt.StringRequired("Enter a name for this container")
-	encrypted := prompt.Confirm("Would you like to encrypt this container?(Yes,y/No,n)")
+	fileName := inputStringRequired("Enter a name for this container")
+	encrypted := inputConfirm("Would you like to encrypt this container?(Yes,y/No,n)")
 	for !done {
-		key := prompt.StringRequired("Enter a key")
-		value := prompt.StringRequired("Enter a value")
+		key := inputStringRequired("Enter a key")
+		value := inputStringRequired("Enter a value")
 		envs[key] = value
-		done = prompt.Confirm("stop adding enviroment variables?(Yes,y/No,n)")
+		done = inputConfirm("stop adding enviroment variables?(Yes,y/No,n)")
 	}
 	printError(p.commands.create(fileName, envs, encrypted))
 }
@@ -52,13 +52,14 @@ func (p *interactivePrompt) update() {
 	envs := make(map[string]string)
 	files, err := p.commands.list()
 	printError(err)
-	i := prompt.Choose("Pick a container to update", files)
+	i := inputChoose("Pick a container to update", files)
 	envFile := files[i]
 	for !done {
-		key := prompt.StringRequired("Enter a key")
-		value := prompt.StringRequired("Enter a value")
+		key := inputStringRequired("Enter a key")
+		fmt.Println("printing the key" + key)
+		value := inputStringRequired("Enter a value")
 		envs[key] = value
-		done = prompt.Confirm("stop adding/updating variables enviroment variables?(Yes,y/No,n)")
+		done = inputConfirm("stop adding/updating variables enviroment variables?(Yes,y/No,n)")
 	}
 	printError(p.commands.update(envFile, envs))
 }
@@ -66,6 +67,6 @@ func (p *interactivePrompt) update() {
 func (p *interactivePrompt) delete() {
 	files, err := p.commands.list()
 	printError(err)
-	i := prompt.Choose("Pick a container to delete", files)
+	i := inputChoose("Pick a container to delete", files)
 	printError(p.commands.delete(files[i]))
 }
