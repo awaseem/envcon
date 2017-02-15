@@ -21,7 +21,11 @@ func (s *session) launch(envs map[string]string) {
 	if err != nil {
 		panic(err)
 	}
-	cmd := exec.Command("sh")
+	shell := os.Getenv("SHELL")
+	if shell == "" {
+		shell = "sh"
+	}
+	cmd := exec.Command(shell)
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
