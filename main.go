@@ -1,9 +1,6 @@
 package main
 
-import (
-	"os"
-	"os/exec"
-)
+import "os"
 
 var langs = []string{
 	"c",
@@ -16,35 +13,6 @@ var langs = []string{
 }
 
 func main() {
-	// wd, err := os.Getwd()
-	// must(err)
-	// fs := fileStorage{
-	// 	concel:        &aesCryp{},
-	// 	storageFolder: wd + "/data",
-	// }
-	// envMap := make(map[string]string)
-	// envMap["hello"] = "worldksldfskldfjsklfjsdklfjsdklfjlfksjfkldsjfsklfjdsklfjsfkljsklfjl"
-	// envMap["hello2"] = "worldksldfskldfjsklfjsdklfjsdklfjlfksjfkldsjfsklfjdsklfjsfkljsklfjl"
-	// envMap["hello3"] = "worldksldfskldfjsklfjsdklfjsdklfjlfksjfkldsjfsklfjdsklfjsfkljsklfjl"
-	// envMap["hello4"] = "worldksldfskldfjsklfjsdklfjsdklfjlfksjfkldsjfsklfjdsklfjsfkljsklfjl"
-	// envMap["hello5"] = "worldksldfskldfjsklfjsdklfjsdklfjlfksjfkldsjfsklfjdsklfjsfkljsklfjl"
-	// f, err := fs.getFile("test.json")
-	// must(err)
-	// f.setContent(envMap, "")
-	// f.save()
-	// f.close()
-
-	// wd, err := os.Getwd()
-	// must(err)
-	// fs := fileStorage{
-	// 	concel:        &aesCryp{},
-	// 	storageFolder: wd,
-	// }
-	// f, err := fs.getFile("test.json")
-	// mapEnv, err := f.getContent("")
-	// must(err)
-	// fmt.Println(mapEnv["hello"])
-
 	wd, err := os.Getwd()
 	must(err)
 	fs := &fileStorage{
@@ -52,19 +20,14 @@ func main() {
 		storageFolder: wd + "/data",
 	}
 
-	p := &interactivePrompt{
+	c := &commands{
 		fileStore: fs,
 		session:   &session{},
 	}
+	p := &interactivePrompt{
+		commands: c,
+	}
 	p.listCommands()
-}
-
-func child() {
-	cmd := exec.Command("sh")
-	cmd.Stdin = os.Stdin
-	cmd.Stderr = os.Stderr
-	cmd.Stdout = os.Stdout
-	must(cmd.Run())
 }
 
 func must(err error) {

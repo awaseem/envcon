@@ -24,3 +24,11 @@ type filer interface {
 type launcher interface {
 	launch(envs map[string]string)
 }
+
+type commander interface {
+	list() ([]string, error)
+	source(fileName string) error
+	create(fileName string, env map[string]string, encrypted bool) error
+	update(fileName string, env map[string]string) error
+	delete(fileName string) error
+}
