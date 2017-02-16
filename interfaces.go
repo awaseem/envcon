@@ -27,6 +27,7 @@ type launcher interface {
 
 type commander interface {
 	list() ([]string, error)
+	listEnv(fileName string) (map[string]string, error)
 	source(fileName string) error
 	create(fileName string, env map[string]string, encrypted bool) error
 	update(fileName string, env map[string]string) error

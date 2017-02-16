@@ -10,6 +10,18 @@ func (p *commands) list() ([]string, error) {
 	return p.fileStore.listFiles()
 }
 
+func (p *commands) listEnv(fileName string) (map[string]string, error) {
+	var pass string
+	file, err := p.fileStore.getFile(fileName)
+	if err != nil {
+		return nil, err
+	}
+	if file.fileContent.Encrypted {
+		pass = p.input.passwordMasked("File is encrypted, please enter the passpharse")
+	}
+	return file.getContent(pass)
+}
+
 func (p *commands) source(fileName string) error {
 	var pass string
 	var envs map[string]string

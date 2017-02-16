@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 var (
-	promptCommands = []string{"source", "create", "update", "delete"}
+	promptCommands = []string{"list", "listenv", "source", "create", "update", "delete"}
 )
 
 type interactivePrompt struct {
@@ -15,6 +15,10 @@ func (p *interactivePrompt) listCommands() {
 	printLogo()
 	i := p.input.choose("Please select from the following commands", promptCommands)
 	switch promptCommands[i] {
+	case "list":
+		p.list()
+	case "listenv":
+		p.listEnv()
 	case "source":
 		p.source()
 	case "create":
@@ -23,6 +27,26 @@ func (p *interactivePrompt) listCommands() {
 		p.update()
 	case "delete":
 		p.delete()
+	}
+}
+
+func (p *interactivePrompt) list() {
+	files, err := p.commands.list()
+	printError(err)
+	for i := range files {
+		fmt.Println(files[i])
+	}
+}
+
+func (p *interactivePrompt) listEnv() {
+	files, err := p.commands.list()
+	printError(err)
+	i := p.input.choose("Select from the following enviroments", files)
+	envFile := files[i]
+	envMap, err := p.commands.listEnv(envFile)
+	printError(err)
+	for k, v := range envMap {
+		fmt.Println(k + "=" + v)
 	}
 }
 

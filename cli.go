@@ -31,6 +31,25 @@ func (c *cli) rootCMD() *cobra.Command {
 	}
 }
 
+func (c *cli) listEnvCMD() *cobra.Command {
+	return &cobra.Command{
+		Use:   "listenv [container name]",
+		Short: "List all enviroment variables in the container",
+		Long:  "List all enviroment variables in based on the input container name.",
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) != 1 {
+				printError(errors.New("listEnv only takes one container name"))
+			}
+			input := args[0]
+			envs, err := c.commands.listEnv(input)
+			printError(err)
+			for k, v := range envs {
+				fmt.Println(k + "=" + v)
+			}
+		},
+	}
+}
+
 func (c *cli) listCMD() *cobra.Command {
 	return &cobra.Command{
 		Use:   "list",
@@ -62,7 +81,7 @@ func (c *cli) sourceCMD() *cobra.Command {
 }
 
 func (c *cli) createCMD() *cobra.Command {
-	return &cobra.Command{
+	createCMD := &cobra.Command{
 		Use:     "create [container name] [enviroment variables, i.e name=value]",
 		Short:   "create a container",
 		Long:    "Create a container with the enviroment variables of your choice.",
@@ -83,6 +102,8 @@ func (c *cli) createCMD() *cobra.Command {
 			printError(c.commands.create(name, envMap, cliEncrypt))
 		},
 	}
+	createCMD.Flags().BoolVarP(&cliEncrypt, "encrypt", "e", false, "encrypt the file")
+	return createCMD
 }
 
 func (c *cli) updateCMD() *cobra.Command {
@@ -116,7 +137,7 @@ func (c *cli) deleteCMD() *cobra.Command {
 		Long:  "delete a container based on the conatiner name",
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) != 1 {
-				printError(errors.New("you must enter a container to delete"))
+				printError(errors.New("delete only takes one container name"))
 			}
 			name := args[0]
 			printError(c.commands.delete(name))
