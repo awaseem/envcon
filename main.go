@@ -1,23 +1,13 @@
 package main
 
-import "os"
-
-var langs = []string{
-	"c",
-	"c++",
-	"lua",
-	"go",
-	"js",
-	"ruby",
-	"python",
-}
+const (
+	storageFolderLoc = "/usr/local/var/envcon"
+)
 
 func main() {
-	wd, err := os.Getwd()
-	must(err)
 	fs := &fileStorage{
 		concel:        &aesCryp{},
-		storageFolder: wd + "/data",
+		storageFolder: storageFolderLoc,
 	}
 	c := &commands{
 		fileStore: fs,
@@ -32,6 +22,10 @@ func main() {
 		commands: c,
 		prompt:   p,
 	}
+	// setup data storage if folder does not exist
+	err := fs.createStore()
+	printError(err)
+	// setup prompts and command line
 	var rootCmd = cli.rootCMD()
 	rootCmd.AddCommand(cli.listCMD())
 	rootCmd.AddCommand(cli.sourceCMD())

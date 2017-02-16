@@ -17,6 +17,13 @@ type envFile struct {
 	fileContent *fileContent
 }
 
+func (f *fileStorage) createStore() error {
+	if _, err := os.Stat(f.storageFolder); os.IsNotExist(err) {
+		return os.Mkdir(f.storageFolder, os.FileMode(700))
+	}
+	return nil
+}
+
 func (f *fileStorage) newFile(fileName string, encrypt bool) (*envFile, error) {
 	newF, err := os.Create(f.storageFolder + "/" + fileName)
 	if err != nil {
