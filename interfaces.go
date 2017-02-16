@@ -19,6 +19,7 @@ type filer interface {
 	getFile(fileName string) (*envFile, error)
 	deleteFile(fileName string) error
 	listFiles() ([]string, error)
+	exists(fileName string) bool
 }
 
 type launcher interface {
@@ -32,6 +33,7 @@ type commander interface {
 	create(fileName string, env map[string]string, encrypted bool) error
 	update(fileName string, env map[string]string) error
 	delete(fileName string) error
+	checkFileExists(fileName string) bool
 }
 
 type prompter interface {

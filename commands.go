@@ -14,6 +14,10 @@ type commands struct {
 	input     inputer
 }
 
+func (p *commands) checkFileExists(fileName string) bool {
+	return p.fileStore.exists(fileName + envconFileExt)
+}
+
 func (p *commands) list() ([]string, error) {
 	fileNames := []string{}
 	files, err := p.fileStore.listFiles()

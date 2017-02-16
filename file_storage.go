@@ -24,6 +24,13 @@ func (f *fileStorage) createStore() error {
 	return nil
 }
 
+func (f *fileStorage) exists(fileName string) bool {
+	if _, err := os.Stat(f.storageFolder + "/" + fileName); err == nil {
+		return true
+	}
+	return false
+}
+
 func (f *fileStorage) newFile(fileName string, encrypt bool) (*envFile, error) {
 	newF, err := os.Create(f.storageFolder + "/" + fileName)
 	if err != nil {

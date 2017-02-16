@@ -75,6 +75,9 @@ func (c *cli) sourceCMD() *cobra.Command {
 				printError(errors.New("source only takes one container name"))
 			}
 			input := args[0]
+			if !c.commands.checkFileExists(input) {
+				printError(errors.New("container does not exist with the following name: " + input))
+			}
 			printError(c.commands.source(input))
 		},
 	}
@@ -91,6 +94,9 @@ func (c *cli) createCMD() *cobra.Command {
 				printError(errors.New("create must take in a filename and at least one enviroment variable"))
 			}
 			name, envs := args[0], args[1:]
+			if c.commands.checkFileExists(name) {
+				printError(errors.New("container already exists with the following name: " + name))
+			}
 			envMap := make(map[string]string)
 			for k := range envs {
 				keyValues := strings.Split(envs[k], envSep)
@@ -117,6 +123,9 @@ func (c *cli) updateCMD() *cobra.Command {
 				printError(errors.New("update must take in a filename and at least one enviroment variable"))
 			}
 			name, envs := args[0], args[1:]
+			if !c.commands.checkFileExists(name) {
+				printError(errors.New("container does not exist with the following name: " + name))
+			}
 			envMap := make(map[string]string)
 			for k := range envs {
 				keyValues := strings.Split(envs[k], envSep)
@@ -140,6 +149,9 @@ func (c *cli) deleteCMD() *cobra.Command {
 				printError(errors.New("delete only takes one container name"))
 			}
 			name := args[0]
+			if !c.commands.checkFileExists(name) {
+				printError(errors.New("container does not exist with the following name: " + name))
+			}
 			printError(c.commands.delete(name))
 		},
 	}

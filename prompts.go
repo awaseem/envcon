@@ -62,6 +62,11 @@ func (p *interactivePrompt) create() {
 	var done bool
 	envs := make(map[string]string)
 	fileName := p.input.stringRequired("Enter a name for this container")
+	if p.commands.checkFileExists(fileName) {
+		fmt.Println("Name is already taken, please try again")
+		p.create()
+		return
+	}
 	encrypted := p.input.confirm("Would you like to encrypt this container?(Yes,y/No,n)")
 	for !done {
 		key := p.input.stringRequired("Enter a key")
