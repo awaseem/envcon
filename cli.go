@@ -63,9 +63,10 @@ func (c *cli) sourceCMD() *cobra.Command {
 
 func (c *cli) createCMD() *cobra.Command {
 	return &cobra.Command{
-		Use:   "create [container name] [enviroment variables, i.e name=value]",
-		Short: "create a container",
-		Long:  "Create a container with the enviroment variables of your choice.",
+		Use:     "create [container name] [enviroment variables, i.e name=value]",
+		Short:   "create a container",
+		Long:    "Create a container with the enviroment variables of your choice.",
+		Example: "envcon create github test=test hello=world secret='skdfj8rfsnfsnfsdf'",
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) < 2 {
 				printError(errors.New("create must take in a filename and at least one enviroment variable"))
@@ -75,11 +76,50 @@ func (c *cli) createCMD() *cobra.Command {
 			for k := range envs {
 				keyValues := strings.Split(envs[k], envSep)
 				if len(keyValues) != 2 {
-					printError(errors.New("the following enviroment was incorrent"))
+					printError(errors.New("the following enviroment was incorrent: " + envs[k]))
 				}
 				envMap[keyValues[0]] = keyValues[1]
 			}
 			printError(c.commands.create(name, envMap, cliEncrypt))
+		},
+	}
+}
+
+func (c *cli) updateCMD() *cobra.Command {
+	return &cobra.Command{
+		Use:     "update [container name] [enviroment variables, i.e name=value]",
+		Short:   "update a container",
+		Long:    "update a container with the enviroment variables of your choice.",
+		Example: "envcon update github test=test hello=world secret='skdfj8rfsnfsnfsdf'",
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) < 2 {
+				printError(errors.New("update must take in a filename and at least one enviroment variable"))
+			}
+			name, envs := args[0], args[1:]
+			envMap := make(map[string]string)
+			for k := range envs {
+				keyValues := strings.Split(envs[k], envSep)
+				if len(keyValues) != 2 {
+					printError(errors.New("the following enviroment was incorrent: " + envs[k]))
+				}
+				envMap[keyValues[0]] = keyValues[1]
+			}
+			printError(c.commands.update(name, envMap))
+		},
+	}
+}
+
+func (c *cli) deleteCMD() *cobra.Command {
+	return &cobra.Command{
+		Use:   "delete [container name]",
+		Short: "delete a container",
+		Long:  "delete a container based on the conatiner name",
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) != 1 {
+				printError(errors.New("you must enter a container to delete"))
+			}
+			name := args[0]
+			printError(c.commands.delete(name))
 		},
 	}
 }
