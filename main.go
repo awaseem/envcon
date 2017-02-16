@@ -34,6 +34,7 @@ func main() {
 	}
 	var rootCmd = cli.rootCMD()
 	rootCmd.AddCommand(cli.listCMD())
+	rootCmd.AddCommand(cli.sourceCMD())
 	rootCmd.Execute()
 }
 
