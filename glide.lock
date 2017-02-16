@@ -1,0 +1,23 @@
+hash: 23786d405e9401c1eb6dcda32c6a4ae744ac1fb0404089cf7af9d21a91ee517a
+updated: 2017-02-15T18:23:29.674349412-08:00
+imports:
+- name: github.com/howeyc/gopass
+  version: bf9dde6d0d2c004a008c27aaee91170c786f6db8
+- name: github.com/inconshreveable/mousetrap
+  version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
+- name: github.com/spf13/cobra
+  version: b5d8e8f46a2f829f755b6e33b454e25c61c935e1
+  subpackages:
+  - cobra
+- name: github.com/spf13/pflag
+  version: 9ff6c6923cfffbcd502984b8e0c80539a94968b7
+- name: golang.org/x/crypto
+  version: 453249f01cfeb54c3d549ddb75ff152ca243f9d8
+  subpackages:
+  - pbkdf2
+  - ssh/terminal
+- name: golang.org/x/sys
+  version: d75a52659825e75fff6158388dddc6a5b04f9ba5
+  subpackages:
+  - unix
+testImports: []

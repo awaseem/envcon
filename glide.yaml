@@ -2,5 +2,9 @@ package: main
 import:
 - package: golang.org/x/crypto
   subpackages:
-  - /pbkdf2
+  - pbkdf2
 - package: github.com/howeyc/gopass
+- package: github.com/spf13/cobra
+  subpackages:
+  - cobra
+- package: github.com/spf13/pflag
