@@ -8,6 +8,18 @@ import (
 
 type cli struct {
 	commands commander
+	prompt   prompter
+}
+
+func (c *cli) rootCMD() *cobra.Command {
+	return &cobra.Command{
+		Use:   "envcon",
+		Short: "Envcon executable enviroment vairable containers",
+		Long:  "Envcon allows you to create enviroment variable containers and launch a process within that container.",
+		Run: func(cmd *cobra.Command, args []string) {
+			c.prompt.listCommands()
+		},
+	}
 }
 
 func (c *cli) listCMD() *cobra.Command {

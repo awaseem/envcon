@@ -19,7 +19,6 @@ func main() {
 		concel:        &aesCryp{},
 		storageFolder: wd + "/data",
 	}
-
 	c := &commands{
 		fileStore: fs,
 		session:   &session{},
@@ -29,7 +28,13 @@ func main() {
 		commands: c,
 		input:    &userInput{},
 	}
-	p.listCommands()
+	cli := &cli{
+		commands: c,
+		prompt:   p,
+	}
+	var rootCmd = cli.rootCMD()
+	rootCmd.AddCommand(cli.listCMD())
+	rootCmd.Execute()
 }
 
 func must(err error) {

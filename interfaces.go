@@ -33,6 +33,10 @@ type commander interface {
 	delete(fileName string) error
 }
 
+type prompter interface {
+	listCommands()
+}
+
 type inputer interface {
 	string(prompt string, args ...interface{}) string
 	stringRequired(prompt string, args ...interface{}) (s string)
