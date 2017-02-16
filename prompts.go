@@ -81,7 +81,6 @@ func (p *interactivePrompt) update() {
 	envFile := files[i]
 	for !done {
 		key := p.input.stringRequired("Enter a key")
-		fmt.Println("printing the key" + key)
 		value := p.input.stringRequired("Enter a value")
 		envs[key] = value
 		done = p.input.confirm("stop adding/updating variables enviroment variables?(Yes,y/No,n)")

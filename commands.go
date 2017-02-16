@@ -1,5 +1,13 @@
 package main
 
+import (
+	"strings"
+)
+
+const (
+	envconFileExt = ".json"
+)
+
 type commands struct {
 	fileStore filer
 	session   launcher
@@ -7,12 +15,20 @@ type commands struct {
 }
 
 func (p *commands) list() ([]string, error) {
-	return p.fileStore.listFiles()
+	fileNames := []string{}
+	files, err := p.fileStore.listFiles()
+	if err != nil {
+		return nil, err
+	}
+	for i := range files {
+		fileNames = append(fileNames, strings.Replace(files[i], envconFileExt, "", -1))
+	}
+	return fileNames, nil
 }
 
 func (p *commands) listEnv(fileName string) (map[string]string, error) {
 	var pass string
-	file, err := p.fileStore.getFile(fileName)
+	file, err := p.fileStore.getFile(fileName + envconFileExt)
 	if err != nil {
 		return nil, err
 	}
@@ -25,7 +41,7 @@ func (p *commands) listEnv(fileName string) (map[string]string, error) {
 func (p *commands) source(fileName string) error {
 	var pass string
 	var envs map[string]string
-	envFile, err := p.fileStore.getFile(fileName)
+	envFile, err := p.fileStore.getFile(fileName + envconFileExt)
 	if err != nil {
 		return err
 	}
@@ -45,7 +61,7 @@ func (p *commands) create(fileName string, env map[string]string, encrypted bool
 	if encrypted {
 		pass = p.input.passwordMasked("Enter a passpharse")
 	}
-	envFile, err := p.fileStore.newFile(fileName+".json", encrypted)
+	envFile, err := p.fileStore.newFile(fileName+envconFileExt, encrypted)
 	if err != nil {
 		return err
 	}
@@ -59,7 +75,7 @@ func (p *commands) create(fileName string, env map[string]string, encrypted bool
 func (p *commands) update(fileName string, env map[string]string) error {
 	var pass string
 	envs := make(map[string]string)
-	envFile, err := p.fileStore.getFile(fileName)
+	envFile, err := p.fileStore.getFile(fileName + envconFileExt)
 	if err != nil {
 		return err
 	}
@@ -81,5 +97,5 @@ func (p *commands) update(fileName string, env map[string]string) error {
 }
 
 func (p *commands) delete(fileName string) error {
-	return p.fileStore.deleteFile(fileName)
+	return p.fileStore.deleteFile(fileName + envconFileExt)
 }

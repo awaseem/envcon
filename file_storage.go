@@ -19,7 +19,7 @@ type envFile struct {
 
 func (f *fileStorage) createStore() error {
 	if _, err := os.Stat(f.storageFolder); os.IsNotExist(err) {
-		return os.Mkdir(f.storageFolder, os.FileMode(700))
+		return os.MkdirAll(f.storageFolder, 0755)
 	}
 	return nil
 }
