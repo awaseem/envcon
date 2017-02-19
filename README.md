@@ -6,6 +6,8 @@
 </pre>
 
 # ENVCON
+[![Go Report Card](https://goreportcard.com/badge/github.com/awaseem/envcon)](https://goreportcard.com/report/github.com/awaseem/envcon)
+
 
 Separate environment variable dependencies without polluting your local environment workspace.
 Idea is to keep each applications environment variables as separate containers, think of `virtualenv` for environment variables.
