@@ -113,7 +113,7 @@ func TestGetFile(t *testing.T) {
 	}
 	fs := fileStorage{
 		concel:        a,
-		storageFolder: wd + "/testData/",
+		storageFolder: wd + "/testData",
 	}
 	var tests = []struct {
 		fileName string
@@ -139,4 +139,8 @@ func TestGetFile(t *testing.T) {
 			}
 		}
 	}
+}
+
+func TestDeleteFile(t *testing.T) {
+
 }
