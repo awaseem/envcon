@@ -34,8 +34,8 @@ func (c *cli) rootCMD() *cobra.Command {
 func (c *cli) listEnvCMD() *cobra.Command {
 	return &cobra.Command{
 		Use:   "listenv [container name]",
-		Short: "List all enviroment variables in the container",
-		Long:  "List all enviroment variables in based on the input container name.",
+		Short: "List all environment variables in the container",
+		Long:  "List all environment variables in based on the input container name.",
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) != 1 {
 				printError(errors.New("listEnv only takes one container name"))
@@ -54,7 +54,7 @@ func (c *cli) listCMD() *cobra.Command {
 	return &cobra.Command{
 		Use:   "list",
 		Short: "List all available containers",
-		Long:  "List all available enviroment conatiners in the storage directory.",
+		Long:  "List all available environment conatiners in the storage directory.",
 		Run: func(cmd *cobra.Command, args []string) {
 			files, err := c.commands.list()
 			printError(err)
@@ -69,7 +69,7 @@ func (c *cli) sourceCMD() *cobra.Command {
 	return &cobra.Command{
 		Use:   "source [container to run]",
 		Short: "source a container",
-		Long:  "Launch a process with all the enviroment variables sourced from the container.",
+		Long:  "Launch a process with all the environment variables sourced from the container.",
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) != 1 {
 				printError(errors.New("source only takes one container name"))
@@ -85,13 +85,13 @@ func (c *cli) sourceCMD() *cobra.Command {
 
 func (c *cli) createCMD() *cobra.Command {
 	createCMD := &cobra.Command{
-		Use:     "create [container name] [enviroment variables, i.e name=value]",
+		Use:     "create [container name] [environment variables, i.e name=value]",
 		Short:   "create a container",
-		Long:    "Create a container with the enviroment variables of your choice.",
+		Long:    "Create a container with the environment variables of your choice.",
 		Example: "envcon create github test=test hello=world secret='skdfj8rfsnfsnfsdf'",
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) < 2 {
-				printError(errors.New("create must take in a filename and at least one enviroment variable"))
+				printError(errors.New("create must take in a filename and at least one environment variable"))
 			}
 			name, envs := args[0], args[1:]
 			if c.commands.checkFileExists(name) {
@@ -101,7 +101,7 @@ func (c *cli) createCMD() *cobra.Command {
 			for k := range envs {
 				keyValues := strings.Split(envs[k], envSep)
 				if len(keyValues) != 2 {
-					printError(errors.New("the following enviroment was incorrent: " + envs[k]))
+					printError(errors.New("the following environment was incorrent: " + envs[k]))
 				}
 				envMap[keyValues[0]] = keyValues[1]
 			}
@@ -114,13 +114,13 @@ func (c *cli) createCMD() *cobra.Command {
 
 func (c *cli) updateCMD() *cobra.Command {
 	return &cobra.Command{
-		Use:     "update [container name] [enviroment variables, i.e name=value]",
+		Use:     "update [container name] [environment variables, i.e name=value]",
 		Short:   "update a container",
-		Long:    "update a container with the enviroment variables of your choice.",
+		Long:    "update a container with the environment variables of your choice.",
 		Example: "envcon update github test=test hello=world secret='skdfj8rfsnfsnfsdf'",
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) < 2 {
-				printError(errors.New("update must take in a filename and at least one enviroment variable"))
+				printError(errors.New("update must take in a filename and at least one environment variable"))
 			}
 			name, envs := args[0], args[1:]
 			if !c.commands.checkFileExists(name) {
@@ -130,7 +130,7 @@ func (c *cli) updateCMD() *cobra.Command {
 			for k := range envs {
 				keyValues := strings.Split(envs[k], envSep)
 				if len(keyValues) != 2 {
-					printError(errors.New("the following enviroment was incorrent: " + envs[k]))
+					printError(errors.New("the following environment was incorrent: " + envs[k]))
 				}
 				envMap[keyValues[0]] = keyValues[1]
 			}

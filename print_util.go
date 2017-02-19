@@ -13,7 +13,7 @@ const (
 /___/_/|_/ |___/\___/\____/_/|_/
 
 `
-	pharse = "Development enviroment container"
+	pharse = "Development environment container"
 )
 
 // printLogo print the logo of this application

@@ -7,8 +7,8 @@
 
 # ENVCON
 
-Separate enviroment variable dependencies without polluting your local enviroment workspace.
-Idea is to keep each applications enviroment variables as separate containers, think of `virtualenv` for enviroment variables.
+Separate environment variable dependencies without polluting your local environment workspace.
+Idea is to keep each applications environment variables as separate containers, think of `virtualenv` for environment variables.
 
 # Install
 
@@ -17,7 +17,7 @@ Currently supported on OSX only. Download the binary [here](https://github.com/a
 ## Commands
 
 ### create
-create a new container with enviroment variables, you can also encrypt the contents.
+create a new container with environment variables, you can also encrypt the contents.
 
 ![](./static/envcon_create.gif)
 
@@ -27,7 +27,7 @@ create a new process with all the variables sourced.
 ![](./static/envcon_source.gif)
 
 ### update
-update enviroment variable keys
+update environment variable keys
 
 ![](./static/envcon_update.gif)
 

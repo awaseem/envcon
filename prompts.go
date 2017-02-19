@@ -41,7 +41,7 @@ func (p *interactivePrompt) list() {
 func (p *interactivePrompt) listEnv() {
 	files, err := p.commands.list()
 	printError(err)
-	i := p.input.choose("Select from the following enviroments", files)
+	i := p.input.choose("Select from the following environments", files)
 	envFile := files[i]
 	envMap, err := p.commands.listEnv(envFile)
 	printError(err)
@@ -53,7 +53,7 @@ func (p *interactivePrompt) listEnv() {
 func (p *interactivePrompt) source() {
 	files, err := p.commands.list()
 	printError(err)
-	i := p.input.choose("Select from the following enviroments", files)
+	i := p.input.choose("Select from the following environments", files)
 	envFile := files[i]
 	p.commands.source(envFile)
 }
@@ -72,7 +72,7 @@ func (p *interactivePrompt) create() {
 		key := p.input.stringRequired("Enter a key")
 		value := p.input.stringRequired("Enter a value")
 		envs[key] = value
-		done = p.input.confirm("stop adding enviroment variables?(Yes,y/No,n)")
+		done = p.input.confirm("stop adding environment variables?(Yes,y/No,n)")
 	}
 	printError(p.commands.create(fileName, envs, encrypted))
 }
@@ -88,7 +88,7 @@ func (p *interactivePrompt) update() {
 		key := p.input.stringRequired("Enter a key")
 		value := p.input.stringRequired("Enter a value")
 		envs[key] = value
-		done = p.input.confirm("stop adding/updating variables enviroment variables?(Yes,y/No,n)")
+		done = p.input.confirm("stop adding/updating variables environment variables?(Yes,y/No,n)")
 	}
 	printError(p.commands.update(envFile, envs))
 }
