@@ -15,14 +15,22 @@ Idea is to keep each applications enviroment variables as separate containers, t
 ### create
 create a new container with enviroment variables, you can also encrypt the contents.
 
+![](./static/envcon_create.gif)
+
 ### source
 create a new process with all the variables sourced.
+
+![](./static/envcon_source.gif)
 
 ### update
 update enviroment variable keys
 
+![](./static/envcon_update.gif)
+
 ### delete 
 delete a container
+
+![](./static/envcon_delete.gif)
 
 ## TODO
 
