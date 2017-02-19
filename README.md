@@ -10,6 +10,10 @@
 Separate enviroment variable dependencies without polluting your local enviroment workspace.
 Idea is to keep each applications enviroment variables as separate containers, think of `virtualenv` for enviroment variables.
 
+# Install
+
+Currently supported on OSX only. Download the binary [here](https://github.com/awaseem/envcon/releases)
+
 ## Commands
 
 ### create
