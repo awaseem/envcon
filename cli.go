@@ -54,7 +54,7 @@ func (c *cli) listCMD() *cobra.Command {
 	return &cobra.Command{
 		Use:   "list",
 		Short: "List all available containers",
-		Long:  "List all available environment conatiners in the storage directory.",
+		Long:  "List all available environment containers in the storage directory.",
 		Run: func(cmd *cobra.Command, args []string) {
 			files, err := c.commands.list()
 			printError(err)
@@ -143,7 +143,7 @@ func (c *cli) deleteCMD() *cobra.Command {
 	return &cobra.Command{
 		Use:   "delete [container name]",
 		Short: "delete a container",
-		Long:  "delete a container based on the conatiner name",
+		Long:  "delete a container based on the container name",
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) != 1 {
 				printError(errors.New("delete only takes one container name"))

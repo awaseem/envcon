@@ -25,7 +25,7 @@ func TestCreateStore(t *testing.T) {
 		t.Error("createStore did not create that directory")
 	}
 
-	// do not create directoy if it still exsits
+	// do not create directory if it still exsits
 	err = fs.createStore()
 	if err != nil {
 		t.Error("createStore threw and error when trying to check for directory")
