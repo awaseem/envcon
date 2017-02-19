@@ -142,5 +142,37 @@ func TestGetFile(t *testing.T) {
 }
 
 func TestDeleteFile(t *testing.T) {
-
+	// setup
+	a := &aesCrypMock{}
+	wd, err := os.Getwd()
+	if err != nil {
+		t.Errorf("failed to get work directory")
+	}
+	fs := fileStorage{
+		concel:        a,
+		storageFolder: wd + "/testData",
+	}
+	_, err = os.Create(wd + "/testData/test_fake.json")
+	if err != nil {
+		t.Errorf("failed to create fake file")
+	}
+	var tests = []struct {
+		fileName string
+		err      bool
+	}{
+		{"test_no_exist.json", true},
+		{"test_fake.json", false},
+	}
+	for _, tt := range tests {
+		err = fs.deleteFile(tt.fileName)
+		if tt.err {
+			if err == nil {
+				t.Error("deleteFile did not throw an error when it was suppose too")
+			}
+		} else {
+			if err != nil {
+				t.Error("deleteFile threw an error when it was not suppose too")
+			}
+		}
+	}
 }
