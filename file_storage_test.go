@@ -103,3 +103,40 @@ func TestNewFile(t *testing.T) {
 		t.Errorf("failed to remove test file")
 	}
 }
+
+func TestGetFile(t *testing.T) {
+	// setup
+	a := &aesCrypMock{}
+	wd, err := os.Getwd()
+	if err != nil {
+		t.Errorf("failed to get work directory")
+	}
+	fs := fileStorage{
+		concel:        a,
+		storageFolder: wd + "/testData/",
+	}
+	var tests = []struct {
+		fileName string
+		encrypt  bool
+		err      bool
+	}{
+		{"test_no_exist.json", false, true},
+		{"test.json", false, false},
+		{"test_encrypt.json", true, false},
+	}
+	for _, tt := range tests {
+		envFile, err := fs.getFile(tt.fileName)
+		if tt.err {
+			if err == nil {
+				t.Error("getFile did not throw an error when it was suppose too")
+			}
+		} else {
+			if err != nil {
+				t.Error("getFile threw en error when it was not suppose to")
+			}
+			if tt.encrypt != envFile.fileContent.Encrypted {
+				t.Error("getFile encrypt flag does not match")
+			}
+		}
+	}
+}
