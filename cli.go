@@ -24,7 +24,7 @@ type cli struct {
 func (c *cli) rootCMD() *cobra.Command {
 	return &cobra.Command{
 		Use:  "envcon",
-		Long: logo,
+		Long: pharse + "\n" + logo,
 		Run: func(cmd *cobra.Command, args []string) {
 			c.prompt.listCommands()
 		},
