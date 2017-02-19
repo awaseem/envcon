@@ -6,6 +6,7 @@
 </pre>
 
 # ENVCON
+[![Build Status](https://travis-ci.org/awaseem/envcon.svg?branch=master)](https://travis-ci.org/awaseem/envcon)
 [![Go Report Card](https://goreportcard.com/badge/github.com/awaseem/envcon)](https://goreportcard.com/report/github.com/awaseem/envcon)
 
 
