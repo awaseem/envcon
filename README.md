@@ -41,6 +41,5 @@ delete a container
 
 ## TODO
 
-- Tests for Commands
 - Test support for linux
 - Add support for Windows
